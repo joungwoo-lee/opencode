@@ -24,7 +24,7 @@
 의존성(LSP 서버, 파서 등)까지 모두 포함된 완전한 오프라인 번들을 생성하려면, 외부망에서 다음 명령어를 실행하세요:
 
 ```bash
-bun run packages/opencode/script/bundle-offline.ts
+bun run opencode_offline_setup/create-offline-bundle.ts
 ```
 
 생성된 `dist/offline` 폴더를 폐쇄망으로 가져가서 `install.sh`를 실행하면 됩니다.
