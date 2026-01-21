@@ -29,7 +29,8 @@ fi
 
 # 2. Locate project
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-WORKSPACE_DIR="$SCRIPT_DIR"
+# SCRIPT_DIR is opencode_offline_setup, so workspace is one level up
+WORKSPACE_DIR="$(dirname "$SCRIPT_DIR")"
 OPENCODE_PKG_DIR="$WORKSPACE_DIR/packages/opencode"
 
 if [ ! -d "$OPENCODE_PKG_DIR" ]; then

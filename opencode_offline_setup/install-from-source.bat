@@ -12,8 +12,11 @@ if %errorlevel% neq 0 (
 
 REM 2. Setup Directories
 set "SCRIPT_DIR=%~dp0"
-set "WORKSPACE_DIR=%SCRIPT_DIR%"
-set "OPENCODE_PKG_DIR=%WORKSPACE_DIR%packages\opencode"
+REM SCRIPT_DIR ends with opencode_offline_setup\, so we need parent dir
+pushd "%SCRIPT_DIR%.."
+set "WORKSPACE_DIR=%CD%"
+popd
+set "OPENCODE_PKG_DIR=%WORKSPACE_DIR%\packages\opencode"
 
 if not exist "%OPENCODE_PKG_DIR%" (
     echo Error: Cannot find packages\opencode directory.
