@@ -4,7 +4,7 @@ setlocal
 echo Installing Opencode for Windows...
 
 set "SCRIPT_DIR=%~dp0"
-set "SOURCE_BIN=%SCRIPT_DIR%dist\opencode-windows-x64.exe"
+set "SOURCE_BIN=%SCRIPT_DIR%opencode-windows-x64.exe"
 set "TARGET_DIR=%USERPROFILE%\opencode\bin"
 
 if not exist "%SOURCE_BIN%" (

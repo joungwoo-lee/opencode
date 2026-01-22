@@ -8,7 +8,7 @@ set -e
 SCRIPT_DIR=$(dirname "$(realpath "$0")")
 INSTALL_DIR="/usr/local/bin"
 BINARY_NAME="opencode"
-SOURCE_BINARY="$SCRIPT_DIR/dist/opencode-linux-x64"
+SOURCE_BINARY="$SCRIPT_DIR/opencode-linux-x64"
 
 if [ ! -f "$SOURCE_BINARY" ]; then
     echo "Error: Binary file '$SOURCE_BINARY' not found."
