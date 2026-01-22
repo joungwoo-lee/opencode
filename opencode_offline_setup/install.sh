@@ -33,5 +33,24 @@ else
     sudo chmod +x "$INSTALL_DIR/$BINARY_NAME"
 fi
 
+# 설정 파일 복사
+echo "Copying configuration files..."
+CONFIG_SOURCE_DIR="$SCRIPT_DIR/config_opencode"
+REAL_USER=${SUDO_USER:-$USER}
+USER_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+CONFIG_DEST_DIR="$USER_HOME/.config/opencode"
+
+if [ -d "$CONFIG_SOURCE_DIR" ]; then
+    mkdir -p "$CONFIG_DEST_DIR"
+    cp -r "$CONFIG_SOURCE_DIR/"* "$CONFIG_DEST_DIR/"
+    # 권한 설정 (사용자 소유로 변경)
+    if [ "$REAL_USER" != "root" ]; then
+        chown -R "$REAL_USER" "$CONFIG_DEST_DIR"
+    fi
+    echo "Configuration files copied to $CONFIG_DEST_DIR"
+else
+    echo "Warning: Configuration source directory '$CONFIG_SOURCE_DIR' not found."
+fi
+
 echo "Installation complete!"
 echo "You can now use '$BINARY_NAME' command."

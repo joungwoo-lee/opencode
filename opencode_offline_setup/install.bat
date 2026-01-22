@@ -34,6 +34,20 @@ echo Adding installation directory to User PATH...
 powershell -Command "$userPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if (-not $userPath.Contains('%TARGET_DIR%')) { [Environment]::SetEnvironmentVariable('Path', $userPath + ';%TARGET_DIR%', 'User'); Write-Host 'Added to PATH.' } else { Write-Host 'Already in PATH.' }"
 
 echo.
+echo Copying configuration files...
+set "CONFIG_SOURCE=%SCRIPT_DIR%config_opencode"
+set "CONFIG_DEST=%USERPROFILE%\.config\opencode"
+
+if exist "%CONFIG_SOURCE%" (
+    if not exist "%CONFIG_DEST%" mkdir "%CONFIG_DEST%"
+    xcopy /E /I /Y "%CONFIG_SOURCE%" "%CONFIG_DEST%"
+    echo Configuration files copied to %CONFIG_DEST%
+) else (
+    echo Warning: Configuration source directory "%CONFIG_SOURCE%" not found.
+)
+
+echo.
 echo Installation complete!
+
 echo Please restart your terminal or command prompt to use the 'opencode' command.
 pause
