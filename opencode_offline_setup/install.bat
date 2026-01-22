@@ -1,53 +1,60 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
+echo ===========================================
 echo Installing Opencode for Windows...
+echo ===========================================
 
 set "SCRIPT_DIR=%~dp0"
 set "SOURCE_BIN=%SCRIPT_DIR%opencode-windows-x64.exe"
 set "TARGET_DIR=%USERPROFILE%\opencode\bin"
 
+:: 1. 소스 파일 존재 확인
 if not exist "%SOURCE_BIN%" (
-    echo Error: Source binary not found at "%SOURCE_BIN%"
-    echo Please make sure you have run the build_offline.sh script first and transferred the "dist" folder.
-    pause
-    exit /b 1
+    echo [ERROR] Source binary not found: "%SOURCE_BIN%"
+    goto :END
 )
 
+:: 2. 폴더 생성 및 파일 복사
 if not exist "%TARGET_DIR%" mkdir "%TARGET_DIR%"
-
 echo Copying binary...
 copy /Y "%SOURCE_BIN%" "%TARGET_DIR%\opencode.exe"
-
 if %ERRORLEVEL% NEQ 0 (
-    echo Error copying file.
-    pause
-    exit /b 1
+    echo [ERROR] Failed to copy file.
+    goto :END
 )
 
-echo.
 echo Binary installed to: %TARGET_DIR%
-echo.
-echo Adding installation directory to User PATH...
 
-:: PowerShell을 사용하여 PATH 환경 변수 업데이트 (중복 체크 포함)
-powershell -Command "$userPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if (-not $userPath.Contains('%TARGET_DIR%')) { [Environment]::SetEnvironmentVariable('Path', $userPath + ';%TARGET_DIR%', 'User'); Write-Host 'Added to PATH.' } else { Write-Host 'Already in PATH.' }"
+:: 3. PATH 환경 변수 추가 (가장 안전한 방식으로 변경)
+echo Updating User PATH...
+set "PS_CMD=$p=[Environment]::GetEnvironmentVariable('Path','User'); if($p -notlike '*%TARGET_DIR%*'){ [Environment]::SetEnvironmentVariable('Path',$p+';%TARGET_DIR%','User'); 'Added' } else { 'Already' }"
 
+for /f "usebackq tokens=*" %%a in (`powershell -NoProfile -Command "%PS_CMD%"`) do set "RESULT=%%a"
+
+if "%RESULT%"=="Added" (
+    echo Successfully added to PATH.
+) else (
+    echo Directory already exists in PATH.
+)
+
+:: 4. 설정 파일 복사
 echo.
-echo Copying configuration files...
 set "CONFIG_SOURCE=%SCRIPT_DIR%config_opencode"
 set "CONFIG_DEST=%USERPROFILE%\.config\opencode"
 
 if exist "%CONFIG_SOURCE%" (
     if not exist "%CONFIG_DEST%" mkdir "%CONFIG_DEST%"
     xcopy /E /I /Y "%CONFIG_SOURCE%" "%CONFIG_DEST%"
-    echo Configuration files copied to %CONFIG_DEST%
-) else (
-    echo Warning: Configuration source directory "%CONFIG_SOURCE%" not found.
+    echo Configuration files copied.
 )
 
 echo.
+echo ===========================================
 echo Installation complete!
+echo ===========================================
 
-echo Please restart your terminal or command prompt to use the 'opencode' command.
+:END
+echo.
+echo Press any key to exit...
 pause
