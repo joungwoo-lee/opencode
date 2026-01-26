@@ -1,0 +1,19 @@
+{
+  "mcp": {
+    "agent-creator-server": {
+      "type": "local",
+      "command": [
+        "python",
+        "{env:HOME}/.config/opencode/agent/agent_creator/mcp_server.py"
+      ],
+      "enabled": true
+    }
+  },
+  "agent": {
+    "agent-creator": {
+      "permission": {
+        "generate_agent_config": "allow"
+      }
+    }
+  }
+}
