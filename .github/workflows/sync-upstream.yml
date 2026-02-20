@@ -31,7 +31,7 @@ jobs:
 
       - name: Fetch upstream
         run: |
-          git fetch upstream --all
+          git fetch upstream
 
       - name: Sync dev branch
         run: |
