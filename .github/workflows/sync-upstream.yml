@@ -43,7 +43,7 @@ jobs:
 
       - name: Push changes
         run: |
-          git push origin dev
+          git push https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git dev
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
